@@ -1,0 +1,139 @@
+# import simplegui, random, establish variables and clouds list
+import simplegui
+import random
+counter = 0
+scene = 1
+x1 = 50
+x2 = 300
+x3 = 0
+x4 = 350
+x5 = 350
+x6 = 250
+x7 = 220
+x8 = 0
+clouds = []
+
+# adds cloud numbers to cloud list
+for i in range(1, 4):
+    x = random.randint(50, 550)
+    y_off = random.randint(5, 25)
+    clouds.append((x,5 + y_off))
+
+def draw_handler(canvas):
+    global counter
+    global scene
+    global x1
+    global x2
+    global x3
+    global x4
+    global x5
+    global x6
+    global x7
+    global x8
+    global clouds
+    # when each scene has finished, 1 is added to the scene counter
+    if counter == 180 or counter == 300 or counter == 360:
+        scene = scene + 1
+    if counter == 300:
+        x1 = 50
+        x2 = 300
+        x3 = 0
+        x4 = 350
+        x5 = 350
+        x6 = 250
+        x7 = 220
+        x8 = 0
+    # calls for draw functions according to the scene and counter numbers
+    # first scene, shows our guy in a room thinking about getting fast food
+    if scene == 1:
+        canvas.draw_polygon([(0, 600), (600, 600), (600, 520), (0, 520)], 1, "blue", "blue")
+        draw_guy(canvas) # draws a stickman (func defined below)
+        draw_text(canvas) # draws text/speech bubble (func defined below)
+    # second scene, shows a car driving down the road, presumably our guy on
+    # the way to a fast food place
+    elif scene == 2:
+        frame.set_canvas_background("lightblue")
+        canvas.draw_polygon([(0, 600), (600, 600), (600, 500), (0, 500)], 1, "black", "gray")
+        draw_car(canvas) # draws a car (func defined below)
+        for cloud in clouds:
+            canvas.draw_circle(cloud, 60, 1, "White", "White") # draws clouds (func defined ABOVE)
+    # the guy pulls up to the fast food place
+    elif scene == 3:
+        draw_car(canvas) # draws a car (func defined below)
+        draw_sign(canvas) # draws a sign (func defined below)
+        canvas.draw_polygon([(0, 600), (600, 600), (600, 500), (0, 500)], 1, "black", "gray")
+    elif scene == 4:
+        draw_car(canvas) # draws a car (func defined below)
+        canvas.draw_polygon([(0, 600), (600, 600), (600, 500), (0, 500)], 1, "black", "gray")
+        draw_sign(canvas) # draws a sign (func defined below)
+        draw_text(canvas) # draws text/speech bubble (func defined below)
+
+# draws a stickman
+def draw_guy(canvas):
+    global counter
+    canvas.draw_circle((100, 250), 50, 5, "black", "white")
+    canvas.draw_line((100, 300), (100, 420), 5, "black")
+    canvas.draw_line((100, 320), (140, 380), 5, "black")
+    canvas.draw_line((100, 320), (60, 380), 5, "black")
+    canvas.draw_line((100, 420), (140, 520), 5, "black")
+    canvas.draw_line((100, 420), (60, 520), 5, "black")
+    counter = counter + 1
+    
+# draws a car
+def draw_car(canvas):
+    global counter
+    global x1
+    global x2
+    global x3
+    global x4
+    global x5
+    global x6
+    global x7
+    global x8
+    canvas.draw_circle((x1, 450), 50, 1, "black", "black")
+    canvas.draw_circle((x2, 450), 50, 1, "black", "black")
+    canvas.draw_polygon([(x3, 450), (x4, 450), (x5, 350), (x6, 300), (x7, 200), (x8, 200)], 5, "black", "red")
+    if scene == 2:
+        x1 = x1 + 5
+        x2 = x2 + 5
+        x3 = x3 + 5
+        x4 = x4 + 5
+        x5 = x5 + 5
+        x6 = x6 + 5
+        x7 = x7 + 5
+        x8 = x8 + 5
+    elif scene == 3:
+        x1 = x1 + 2
+        x2 = x2 + 2
+        x3 = x3 + 2
+        x4 = x4 + 2
+        x5 = x5 + 2
+        x6 = x6 + 2
+        x7 = x7 + 2
+        x8 = x8 + 2
+    counter = counter + 1
+
+# draws the fast food place sign
+def draw_sign(canvas):
+    canvas.draw_polygon([(500, 500), (515, 500), (515, 200), (500, 200)], 3, "black", "white")
+    canvas.draw_polygon([(420, 300), (590, 300), (590, 100), (420, 100)], 3, "black", "white")
+    canvas.draw_text("super cool fast", (433, 180), 25, "red")
+    canvas.draw_text("food place", (448, 210), 25, "red")
+    canvas.draw_text("(we're closed lol)", (450, 250), 15, "black")
+
+# draws a text bubble with text depending on the scene
+def draw_text(canvas):
+    global scene
+    if scene == 1:
+        canvas.draw_circle((400, 200), 120, 5, "black", "white")
+        canvas.draw_text("I'm hungry. I think I want", (300, 190), 20, "black")
+        canvas.draw_text("some fast food for lunch.", (300, 210), 20, "black")
+    elif scene == 4:
+        canvas.draw_circle((150, 100), 80, 5, "black", "white")
+        canvas.draw_text("Oh.", (135, 110), 20, "black")
+
+# creates frame
+frame = simplegui.create_frame('Animation', 600, 600)
+frame.set_canvas_background("white")
+frame.set_draw_handler(draw_handler)
+frame.start()
